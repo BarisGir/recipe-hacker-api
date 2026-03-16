@@ -8,14 +8,15 @@ app.use(express.json());
 
 app.post('/api/tarif-hacker', async (req, res) => {
   const { prompt } = req.body;
-  const apiKey = process.env.GEMINI_API_KEY; // Şifremiz Render'ın gizli kasasından gelecek!
+  const apiKey = process.env.GEMINI_API_KEY; 
   
   if (!apiKey) {
     return res.status(500).json({ error: "API Key bulunamadı kral!" });
   }
 
   try {
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+    // İŞTE BURASI DEĞİŞTİ: gemini-1.5-flash yerine gemini-1.5-flash-latest yaptık!
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${apiKey}`;
     const response = await fetch(url, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
