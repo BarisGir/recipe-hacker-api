@@ -13,8 +13,8 @@ app.post('/api/tarif-hacker', async (req, res) => {
   if (!apiKey) return res.status(500).json({ error: "API Key eksik!" });
 
   try {
-    // Senin listendeki en stabil joker model: gemini-pro-latest
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro-latest:generateContent?key=${apiKey}`;
+    // EN YÜKSEK KOTAYA SAHİP HIZLI MODEL: gemini-1.5-flash-8b
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-8b:generateContent?key=${apiKey}`;
     
     const response = await fetch(url, {
       method: "POST",
