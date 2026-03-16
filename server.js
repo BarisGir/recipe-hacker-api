@@ -13,9 +13,8 @@ app.post('/api/tarif-hacker', async (req, res) => {
   if (!apiKey) return res.status(500).json({ error: "API Key eksik!" });
 
   try {
-    // Senin listendeki en güçlü ve hızlı model: gemini-2.0-flash
-    // (İstersen gemini-2.5-flash da yapabiliriz ama 2.0 şu an en stabilidir)
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+    // Senin listendeki en stabil joker model: gemini-pro-latest
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro-latest:generateContent?key=${apiKey}`;
     
     const response = await fetch(url, {
       method: "POST",
@@ -24,9 +23,14 @@ app.post('/api/tarif-hacker', async (req, res) => {
     });
     
     const data = await response.json();
+    
+    if (data.error) {
+        return res.status(data.error.code || 400).json(data);
+    }
+
     res.json(data);
   } catch (error) {
-    res.status(500).json({ error: 'Sunucuda hata oluştu.' });
+    res.status(500).json({ error: 'Sunucuda bir aksaklık oldu.' });
   }
 });
 
