@@ -15,8 +15,9 @@ app.post('/api/tarif-hacker', async (req, res) => {
   }
 
   try {
-    // EN STABİL VERSİYON: v1 ve gemini-1.5-flash
-    const url = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+    // EN GARANTİ MODEL: gemini-pro
+    // VERSİYON: v1beta (En geniş destek bu sürümde)
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${apiKey}`;
     
     const response = await fetch(url, {
       method: "POST",
@@ -27,7 +28,7 @@ app.post('/api/tarif-hacker', async (req, res) => {
     const data = await response.json();
     res.json(data);
   } catch (error) {
-    res.status(500).json({ error: 'Sunucu hatası.' });
+    res.status(500).json({ error: 'Sunucu hatası oluştu kral.' });
   }
 });
 
