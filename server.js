@@ -10,13 +10,9 @@ app.post('/api/tarif-hacker', async (req, res) => {
   const { prompt } = req.body;
   const apiKey = process.env.GEMINI_API_KEY; 
   
-  if (!apiKey) {
-    return res.status(500).json({ error: "API Key eksik!" });
-  }
-
   try {
-    // EN GENİŞ KAPSAMLI BAĞLANTI: v1beta ve gemini-1.5-flash-latest
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${apiKey}`;
+    // EN GÜNCEL VE EN ÇOK KABUL GÖREN URL YAPISI
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
     
     const response = await fetch(url, {
       method: "POST",
@@ -30,14 +26,14 @@ app.post('/api/tarif-hacker', async (req, res) => {
     
     const data = await response.json();
     
-    // Eğer Google hala hata döndürürse, hatanın ne olduğunu bozmadan eklentiye ilet
+    // Eğer Google yine hata dönerse hatayı direkt görelim
     if (data.error) {
         return res.status(data.error.code || 400).json(data);
     }
 
     res.json(data);
   } catch (error) {
-    res.status(500).json({ error: 'Sunucu tarafında teknik bir arıza oluştu.' });
+    res.status(500).json({ error: 'Sistemde bir aksaklık var.' });
   }
 });
 
