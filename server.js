@@ -10,17 +10,12 @@ app.post('/api/tarif-hacker', async (req, res) => {
   const { prompt } = req.body;
   const apiKey = process.env.GEMINI_API_KEY; 
   
-  try {
-    // Önce bir modelleri listeleyelim, bakalım senin hesap neyi görüyor?
-    const listUrl = `https://generativelanguage.googleapis.com/v1beta/models?key=${apiKey}`;
-    const listRes = await fetch(listUrl);
-    const listData = await listRes.json();
-    
-    // Modellerin isimlerini bir metin haline getirelim
-    const modelListesi = listData.models ? listData.models.map(m => m.name).join(", ") : "Liste alınamadı";
+  if (!apiKey) return res.status(500).json({ error: "API Key eksik!" });
 
-    // Asıl isteği gönderelim
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+  try {
+    // Senin listendeki en güçlü ve hızlı model: gemini-2.0-flash
+    // (İstersen gemini-2.5-flash da yapabiliriz ama 2.0 şu an en stabilidir)
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
     
     const response = await fetch(url, {
       method: "POST",
@@ -29,19 +24,9 @@ app.post('/api/tarif-hacker', async (req, res) => {
     });
     
     const data = await response.json();
-
-    if (data.error) {
-      // HATA VARSA: Hem hatayı hem de senin erişebildiğin modelleri ekrana basıyoruz!
-      return res.status(404).json({
-        error: {
-          message: `MODEL BULUNAMADI! Senin erişebildiğin modeller şunlar: ${modelListesi}. Google'ın hatası ise: ${data.error.message}`
-        }
-      });
-    }
-
     res.json(data);
   } catch (error) {
-    res.status(500).json({ error: 'Liste çekilirken hata oluştu.' });
+    res.status(500).json({ error: 'Sunucuda hata oluştu.' });
   }
 });
 
